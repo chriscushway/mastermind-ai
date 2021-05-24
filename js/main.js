@@ -1,5 +1,5 @@
 const rightIndicators = document.querySelectorAll('.indicator-wrapper:nth-of-type(5) > .handle');
-
+const leftIndicators = document.querySelectorAll('.indicator-wrapper:nth-of-type(6) > .handle');
 const maxDragLength = rightIndicators[0].clientWidth;
 console.log(rightIndicators);
 
@@ -7,8 +7,9 @@ document.addEventListener('mouseup', dragEnd);
 
 for(let i =0; i < rightIndicators.length; i++) {
     rightIndicators[i].addEventListener('mousedown', dragStart, false);
-    
+    leftIndicators[i].addEventListener('mousedown', dragStart, false);
     rightIndicators[i].addEventListener('mousemove', drag, false);
+    leftIndicators[i].addEventListener('mousemove', dragLeft, false);
 }
 
 let move = false;
@@ -51,5 +52,21 @@ function drag(e) {
         }
     }
     
+}
+
+function dragLeft(e) {
+    e.preventDefault();
+    if(move) {
+        endX = e.clientX - startX;
+        startX = e.clientX;
+        const sum = parent.offsetLeft + endX;
+        if(parent.offsetLeft < maxDragLength && parent.offsetLeft > 0 || endX > 0 && parent.offsetLeft <= 0 || endX <= 0 && parent.offsetLeft >= maxDragLength) {
+            parent.style.left = (sum) + 'px';
+        } else if(parent.offsetLeft <= 0) {
+            parent.style.left = 0 + 'px';
+        } else {
+            parent.style.left = maxDragLength + 'px';
+        }
+    }
 }
 
